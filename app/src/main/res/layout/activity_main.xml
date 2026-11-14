@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- ======================================================== -->
+    <!-- ZONE DU HAUT : Affichage et contrôles (environ 45 %)     -->
+    <!-- ======================================================== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/zoneAffichage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/fond_zone_affichage"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintHeight_percent="0.45"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Titre : Centré, texte blanc, 20sp -->
+        <TextView
+            android:id="@+id/tvTitre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/titre_application"
+            android:textColor="@color/texte_titre"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Devise source (ex. USD) -->
+        <Spinner
+            android:id="@+id/spDeviseSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitre"
+            app:layout_constraintBottom_toTopOf="@id/btnInverser" />
+
+        <!-- Montant saisi : Aligné à droite, 48sp, souligné -->
+        <TextView
+            android:id="@+id/tvMontant"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text="@string/montant_initial"
+            android:textColor="@color/texte_affichage"
+            android:textSize="48sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toEndOf="@id/spDeviseSource"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/spDeviseSource" />
+
+        <!-- Ligne de soulignement du montant saisi -->
+        <View
+            android:id="@+id/underlineMontant"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/soulignement"
+            app:layout_constraintTop_toBottomOf="@id/tvMontant"
+            app:layout_constraintStart_toStartOf="@id/tvMontant"
+            app:layout_constraintEnd_toEndOf="@id/tvMontant" />
+
+        <!-- Bouton inverser : Échange les deux devises -->
+        <ImageButton
+            android:id="@+id/btnInverser"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/btn_inverser_desc"
+            android:src="@drawable/ic_swap_vert"
+            app:layout_constraintStart_toStartOf="@id/spDeviseSource"
+            app:layout_constraintTop_toBottomOf="@id/spDeviseSource"
+            app:layout_constraintBottom_toTopOf="@id/spDeviseCible" />
+
+        <!-- Devise cible (ex. EUR) -->
+        <Spinner
+            android:id="@+id/spDeviseCible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnInverser"
+            app:layout_constraintBottom_toTopOf="@id/btnConvertir" />
+
+        <!-- Résultat : Aligné à droite, 48sp, souligné -->
+        <TextView
+            android:id="@+id/tvResultat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text="@string/resultat_initial"
+            android:textColor="@color/texte_affichage"
+            android:textSize="48sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toEndOf="@id/spDeviseCible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/spDeviseCible" />
+
+        <!-- Ligne de soulignement du résultat -->
+        <View
+            android:id="@+id/underlineResultat"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/soulignement"
+            app:layout_constraintTop_toBottomOf="@id/tvResultat"
+            app:layout_constraintStart_toStartOf="@id/tvResultat"
+            app:layout_constraintEnd_toEndOf="@id/tvResultat" />
+
+        <!-- Bouton CONVERTIR : Lance la conversion -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnConvertir"
+            android:layout_width="190dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_btn_convertir"
+            android:text="@string/btn_convertir"
+            android:textColor="@color/btn_convertir_texte"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spDeviseCible"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ======================================================== -->
+    <!-- ZONE DU BAS : Clavier numérique TableLayout 4x3          -->
+    <!-- ======================================================== -->
+    <TableLayout
+        android:id="@+id/tableLayoutClavier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/fond_zone_clavier"
+        android:padding="12dp"
+        android:stretchColumns="*"
+        app:layout_constraintTop_toBottomOf="@id/zoneAffichage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Ligne 1 : 7, 8, 9 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn7"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_7"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+
+            <Button
+                android:id="@+id/btn8"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_8"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+
+            <Button
+                android:id="@+id/btn9"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_9"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+        </TableRow>
+
+        <!-- Ligne 2 : 4, 5, 6 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn4"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_4"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+
+            <Button
+                android:id="@+id/btn5"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_5"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+
+            <Button
+                android:id="@+id/btn6"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_6"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+        </TableRow>
+
+        <!-- Ligne 3 : 1, 2, 3 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn1"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_1"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+
+            <Button
+                android:id="@+id/btn2"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_2"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+
+            <Button
+                android:id="@+id/btn3"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_3"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+        </TableRow>
+
+        <!-- Ligne 4 : C (rouge), 0, . -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnC"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_clear"
+                android:textColor="@color/touche_clear"
+                android:textSize="32sp" />
+
+            <Button
+                android:id="@+id/btn0"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_0"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+
+            <Button
+                android:id="@+id/btnPoint"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/key_dot"
+                android:textColor="@color/chiffre_clavier"
+                android:textSize="32sp" />
+        </TableRow>
+
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

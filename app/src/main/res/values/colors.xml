@@ -1,0 +1,20 @@
+<resources>
+    <!-- Couleurs spécifiées dans le sujet du TP -->
+    <color name="fond_zone_affichage">#2BB8E8</color>
+    <color name="chiffre_clavier">#1BA6C9</color>
+    <color name="touche_clear">#F0727A</color>
+
+    <!-- Couleurs de l'interface graphique -->
+    <color name="fond_zone_clavier">#F8F9FA</color>
+    <color name="texte_titre">#FFFFFF</color>
+    <color name="texte_affichage">#1A1A1A</color>
+    <color name="soulignement">#1A1A1A</color>
+    <color name="btn_convertir_fond">#8EBCE6</color>
+    <color name="btn_convertir_texte">#143D66</color>
+    <color name="icone_inverser">#1A1A1A</color>
+
+    <!-- Couleurs de base -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+</resources>
