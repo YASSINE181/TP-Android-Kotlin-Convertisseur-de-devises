@@ -43,3 +43,21 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
 }
+
+tasks.named<Delete>("clean") {
+    setDelete(emptyList<Any>())
+    doLast {
+        val target = layout.buildDirectory.asFile.get()
+        if (target.exists()) {
+            val success = target.deleteRecursively()
+            if (!success) {
+                try {
+                    val process = ProcessBuilder("cmd", "/c", "rd /s /q \"${target.absolutePath}\"")
+                        .redirectErrorStream(true)
+                        .start()
+                    process.waitFor()
+                } catch (_: Exception) {}
+            }
+        }
+    }
+}
