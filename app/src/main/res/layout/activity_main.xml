@@ -37,12 +37,15 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Devise source (ex. USD) -->
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spDeviseSource"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:spinnerMode="dropdown"
+            android:popupBackground="@color/white"
+            android:dropDownWidth="150dp"
+            android:dropDownVerticalOffset="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitre"
             app:layout_constraintBottom_toTopOf="@id/btnInverser" />
@@ -85,12 +88,15 @@
             app:layout_constraintBottom_toTopOf="@id/spDeviseCible" />
 
         <!-- Devise cible (ex. EUR) -->
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spDeviseCible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:spinnerMode="dropdown"
+            android:popupBackground="@color/white"
+            android:dropDownWidth="150dp"
+            android:dropDownVerticalOffset="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnInverser"
             app:layout_constraintBottom_toTopOf="@id/btnConvertir" />

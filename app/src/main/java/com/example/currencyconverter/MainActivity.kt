@@ -1,6 +1,8 @@
 package com.example.currencyconverter
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -76,6 +78,21 @@ class MainActivity : AppCompatActivity() {
         // Sélection par défaut : source = USD (index 0), cible = EUR (index 1)
         binding.spDeviseSource.setSelection(0)
         binding.spDeviseCible.setSelection(1)
+
+        val spinnerListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val texteMontant = binding.tvMontant.text.toString().trim()
+                val montant = texteMontant.toDoubleOrNull() ?: 0.0
+                if (montant > 0.0) {
+                    executerConversion(afficherToastSiZero = false)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        binding.spDeviseSource.onItemSelectedListener = spinnerListener
+        binding.spDeviseCible.onItemSelectedListener = spinnerListener
     }
 
     /**
@@ -154,6 +171,9 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding.tvMontant.append(c)
         }
+
+        // Calcul automatique instantané en temps réel
+        executerConversion(afficherToastSiZero = false)
     }
 
     /**
@@ -174,20 +194,23 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Valide la saisie, applique la conversion et formate le résultat à 2 décimales.
-     * Affiche un Toast d'erreur si le montant vaut 0.
+     * Affiche un Toast d'erreur si le montant vaut 0 (uniquement au clic sur CONVERTIR).
      */
-    private fun executerConversion() {
+    fun executerConversion(afficherToastSiZero: Boolean = true) {
         val texteMontant = binding.tvMontant.text.toString().trim()
         val montant = texteMontant.toDoubleOrNull() ?: 0.0
 
-        // Si le montant vaut 0, afficher le Toast d'avertissement
+        // Si le montant vaut 0, afficher le Toast d'avertissement si demandé
         if (montant == 0.0) {
-            Toast.makeText(this, getString(R.string.toast_montant_zero), Toast.LENGTH_SHORT).show()
+            if (afficherToastSiZero) {
+                Toast.makeText(this, getString(R.string.toast_montant_zero), Toast.LENGTH_SHORT).show()
+            }
+            binding.tvResultat.text = getString(R.string.resultat_initial)
             return
         }
 
-        val deviseSource = binding.spDeviseSource.selectedItem.toString()
-        val deviseCible = binding.spDeviseCible.selectedItem.toString()
+        val deviseSource = binding.spDeviseSource.selectedItem?.toString() ?: "USD"
+        val deviseCible = binding.spDeviseCible.selectedItem?.toString() ?: "EUR"
 
         val resultat = convertir(montant, deviseSource, deviseCible)
 
@@ -197,7 +220,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Échange les sélections des deux Spinners (source et cible)
-     * et relance automatiquement le calcul si un résultat est déjà affiché.
+     * et relance automatiquement le calcul.
      */
     private fun inverserDevises() {
         val positionSource = binding.spDeviseSource.selectedItemPosition
@@ -207,18 +230,8 @@ class MainActivity : AppCompatActivity() {
         binding.spDeviseSource.setSelection(positionCible)
         binding.spDeviseCible.setSelection(positionSource)
 
-        // Si un résultat est déjà affiché, relancer la conversion immédiatement
-        if (binding.tvResultat.text.isNotEmpty()) {
-            val texteMontant = binding.tvMontant.text.toString().trim()
-            val montant = texteMontant.toDoubleOrNull() ?: 0.0
-
-            if (montant > 0.0) {
-                val nouvelleSource = binding.spDeviseSource.adapter.getItem(positionCible).toString()
-                val nouvelleCible = binding.spDeviseCible.adapter.getItem(positionSource).toString()
-                val resultat = convertir(montant, nouvelleSource, nouvelleCible)
-                binding.tvResultat.text = String.format(Locale.US, "%.2f", resultat)
-            }
-        }
+        // Relance immédiatement la conversion
+        executerConversion(afficherToastSiZero = false)
     }
 
     /**
